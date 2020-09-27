@@ -1,35 +1,34 @@
-
-from django.conf import settings
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseForbidden
-
-from linebot import LineBotApi, WebhookParser
-from linebot.exceptions import InvalidSignatureError, LineBotApiError
-from linebot.models import MessageEvent, TextSendMessage
-
 from django.views.decorators.csrf import csrf_exempt
 
-# get token
-line_bot_api = LineBotApi(settings.LINE_CHANNEL_ACCESS_TOKEN)
-parser = WebhookParser(settings.LINE_CHANNEL_SECRET)
+from chatBot.lineBot.manager.demoManager import demoManager
 
+# ----to do----
+# modify name
+# dotenv
 
+# init line manager
+lineManager = demoManager()
+
+# test
 def getLinePage(request):
     return render(request, 'test.html', {})
 
-@csrf_exempt
-def lineCallBAck(request):
-        signature = request.META['HTTP_X_LINE_SIGNATURE']
-        body = request.body.decode('utf-8')
+# callback function to reply user message
+@csrf_exempt #!!!
+def lineCallBack(request):
+    lineManager.callBack(request)
+    return render()
 
-        events = parser.parse(body, signature)
+# push message to a user
+def linePushMessage(request):
+    lineManager.linePushMessage({'text':'send message to me'}, userID=lineManager.getMyUserID())
+    return HttpResponse()
 
-        for event in events:
-            if isinstance(event, MessageEvent):
-                line_bot_api.reply_message(
-                            event.reply_token,
-                            TextSendMessage(text=event.message.text)
-                        )
-        return HttpResponse()
+# broadcast message to users
+def lineBroadCast(request):
+    lineManager.linePushMessage({'text': 'broadcast message'}, isBroadCast=True)
+    return HttpResponse()
 
 
