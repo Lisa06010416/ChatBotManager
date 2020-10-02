@@ -5,6 +5,12 @@ from dotenv import load_dotenv
 import os
 from chatbot.linebot.demo_manager import demoManager
 
+
+# !! dotenv 不能再setting中使用，setting可以拿到
+# !! 但是其他檔案沒有辦法用 from django.config import setting
+# !! 來拿到setting中的值
+# !! from django.config import setting 只能夠拿到靜態一開始就寫好的變數
+
 # get secret
 load_dotenv()
 myUserId = os.getenv('myUserId')
