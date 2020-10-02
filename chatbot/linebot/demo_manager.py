@@ -1,11 +1,11 @@
 from linebot.models import MessageEvent, TextSendMessage
 
-from chatBot.lineBot.lineManager import lineManager
+from chatbot.linebot.manager.line_manager import lineManager
 
 
 class demoManager(lineManager):
-    def __init__(self):
-        lineManager.__init__(self)
+    def __init__(self, myuserId, access_token, channel_secret):
+        lineManager.__init__(self, myuserId, access_token, channel_secret)
 
     def _callBackMethod(self, lineBotAPI, events):
         for event in events:

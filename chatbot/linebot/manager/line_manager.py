@@ -3,19 +3,11 @@ import abc
 from linebot import LineBotApi, WebhookParser
 from linebot.exceptions import LineBotApiError
 
-import chatBot.utils.readSecret as readSecret
-
-
 class lineManager(abc.ABC):
-    def __init__(self):
-        # read channel token and secret, userID
-        reader = readSecret.reader()
-        secret = reader.readSecret('SECRET/Line')
-        # property
-        print(secret)
-        self.__myUserId = secret["myUserId"]
-        self.__line_bot_api = LineBotApi(secret["LINE_CHANNEL_ACCESS_TOKEN"])
-        self.__parser = WebhookParser(secret["LINE_CHANNEL_SECRET"])
+    def __init__(self, myuserId, access_token, channel_secret):
+        self.__myUserId = myuserId
+        self.__line_bot_api = LineBotApi(access_token)
+        self.__parser = WebhookParser(channel_secret)
 
     # get property
     def getMyUserID(self):
