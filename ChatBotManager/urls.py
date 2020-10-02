@@ -18,4 +18,5 @@ from django.urls import path
 
 urlpatterns = [
     path('Line/', include('Line.urls')),
+    path('Telegram/', include('Telegram.urls')),
 ]
