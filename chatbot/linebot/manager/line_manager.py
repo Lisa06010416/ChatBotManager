@@ -10,44 +10,44 @@ class lineManager(abc.ABC):
         self.__parser = WebhookParser(channel_secret)
 
     # get property
-    def getMyUserID(self):
+    def get_myuserid(self):
         return self.__myUserId
 
-    def getLineBotAPI(self):
+    def get_linebot_api(self):
         return self.__line_bot_api
 
-    def getParse(self):
+    def get_parse(self):
         return self.__parser
 
     # reply message
-    def callBack(self, request):
+    def callback(self, request):
         signature = request.META['HTTP_X_LINE_SIGNATURE']
         body = request.body.decode('utf-8')
-        parser = self.getParse()
+        parser = self.get_parse()
         events = parser.parse(body, signature)
 
-        lineBotAPI = self.getLineBotAPI()
-        self._callBackMethod(lineBotAPI, events)
+        lineBotAPI = self.get_linebot_api()
+        self._callback_method(lineBotAPI, events)
 
     @abc.abstractmethod
-    def _callBackMethod(self, lineBotAPI, events):
+    def _callback_method(self, line_bot_api, events):
         return NotImplemented
 
     # push message contain push and broadcast
-    def linePushMessage(self, messageDic, userID=None, isBroadCast=False):
+    def line_push_message(self, message_dic, userid=None, is_broadcast=False):
         try:
-            lineBotAPI = self.getLineBotAPI()
-            if isBroadCast:
-                self._broadcastMessageMethod(lineBotAPI, messageDic)
+            lineBotAPI = self.get_linebot_api()
+            if is_broadcast:
+                self._broadcast_message_method(lineBotAPI, message_dic)
             else:
-                self._pushMessageMethod(lineBotAPI, messageDic, userID)
+                self._push_message_method(lineBotAPI, message_dic, userid)
         except LineBotApiError as e:
             raise e
 
     @abc.abstractmethod
-    def _pushMessageMethod(self, lineBotAPI, messageDic, userIdSet):
+    def _push_message_method(self, line_bot_api, message_dic, userid_set):
         return NotImplemented
 
     @abc.abstractmethod
-    def _broadcastMessageMethod(self, lineBotAPI, messageDic):
+    def _broadcast_message_method(self, line_bot_api, message_dic):
         return NotImplemented
